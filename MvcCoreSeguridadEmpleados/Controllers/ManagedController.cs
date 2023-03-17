@@ -33,6 +33,18 @@ namespace MvcCoreSeguridadEmpleados.Controllers
                     ClaimTypes.Name, ClaimTypes.Role);
                 Claim claimName = new Claim(ClaimTypes.Name, username);
                 identity.AddClaim(claimName);
+                Claim claimId = new Claim(ClaimTypes.NameIdentifier
+                    , empleado.IdEmpleado.ToString());
+                identity.AddClaim(claimId);
+                Claim claimOficio =
+                    new Claim(ClaimTypes.Role, empleado.Oficio);
+                identity.AddClaim(claimOficio);
+                Claim claimSalario =
+                    new Claim("Salario", empleado.Salario.ToString());
+                identity.AddClaim(claimSalario);
+                Claim claimDepartamento =
+                    new Claim("Departamento", empleado.Departamento.ToString());
+                identity.AddClaim(claimDepartamento);
                 ClaimsPrincipal userPrincipal =
                     new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync
