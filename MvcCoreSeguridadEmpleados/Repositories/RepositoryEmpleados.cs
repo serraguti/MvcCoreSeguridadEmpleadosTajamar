@@ -1,4 +1,5 @@
-﻿using MvcCoreSeguridadEmpleados.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using MvcCoreSeguridadEmpleados.Data;
 using MvcCoreSeguridadEmpleados.Models;
 
 namespace MvcCoreSeguridadEmpleados.Repositories
@@ -12,24 +13,38 @@ namespace MvcCoreSeguridadEmpleados.Repositories
             this.context = context;
         }
 
-        public List<Empleado> GetEmpleados()
+        public async Task<List<Empleado>> GetEmpleadosAsync()
         {
-            return this.context.Empleados.ToList();
+            return await
+                this.context.Empleados.ToListAsync();
         }
 
-        public Empleado FindEmpleado(int idempleado)
+        public async Task<Empleado> FindEmpleadoAsync(int idempleado)
         {
-            return
-                this.context.Empleados.FirstOrDefault
+            return await
+                this.context.Empleados.FirstOrDefaultAsync
                 (x => x.IdEmpleado == idempleado);
         }
 
-        public List<Empleado> GetEmpleadosDepartamento(int iddepartamento)
+        public async Task<List<Empleado>> 
+            GetEmpleadosDepartamentoAsync(int iddepartamento)
         {
             var consulta = from datos in this.context.Empleados
                            where datos.Departamento == iddepartamento
                            select datos;
-            return consulta.ToList();
+            return await consulta.ToListAsync();
+        }
+
+        public async Task UpdateSalariosDepartamento
+            (int iddepartamento, int incremento)
+        {
+            List<Empleado> empleados =
+                await this.GetEmpleadosDepartamentoAsync(iddepartamento);
+            foreach (Empleado empleado in empleados)
+            {
+                empleado.Salario += incremento;
+            }
+            await this.context.SaveChangesAsync();
         }
     }
 }
