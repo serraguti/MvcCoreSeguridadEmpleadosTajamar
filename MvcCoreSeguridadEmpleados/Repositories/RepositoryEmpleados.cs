@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MvcCoreSeguridadEmpleados.Data;
 using MvcCoreSeguridadEmpleados.Models;
+using System.Runtime.CompilerServices;
 
 namespace MvcCoreSeguridadEmpleados.Repositories
 {
@@ -11,6 +12,15 @@ namespace MvcCoreSeguridadEmpleados.Repositories
         public RepositoryEmpleados(EmpleadosContext context)
         {
             this.context = context;
+        }
+
+        public async Task<Empleado> ExisteEmpleado
+            (string apellido, int idempleado)
+        {
+            var consulta =
+                this.context.Empleados.Where(x => x.Apellido == apellido
+                && x.IdEmpleado == idempleado);
+            return await consulta.FirstOrDefaultAsync();
         }
 
         public async Task<List<Empleado>> GetEmpleadosAsync()
