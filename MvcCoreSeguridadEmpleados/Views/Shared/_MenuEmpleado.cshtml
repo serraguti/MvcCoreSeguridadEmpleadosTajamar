@@ -22,4 +22,14 @@
             Mi perfil
         </a>
     </li>
+    @if (Context.User.IsInRole("DIRECTOR"))
+    {
+        <li class="nav-item">
+            <a class="nav-link"
+       asp-controller="Empleados"
+       asp-action="PerfilEmpleado">
+                Zona Admin
+            </a>
+        </li>
+    }
 }
